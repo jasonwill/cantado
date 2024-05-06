@@ -134,7 +134,7 @@ export default async function Page() {
           {albumItems}
         </div>
       </div>
-      <pre>{JSON.stringify(data.results,null,2)}</pre>
+      {/* <pre>{JSON.stringify(data.results,null,2)}</pre> */}
     </div>
   );
 }
