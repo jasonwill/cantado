@@ -2,6 +2,8 @@ import * as stylex from '@stylexjs/stylex'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { buildTree, CantoItem, TreeNode, TreeNodeProps } from '@/lib/buildtree'
+
 const album = stylex.create({
   logo: {
     backgroundColor: 'rgb(255 213 95)',
@@ -50,6 +52,21 @@ const album = stylex.create({
   },
 })
 
+const RenderTreeNode: React.FC<TreeNodeProps> = ({ node }) => (
+  <li>
+    <div>
+      <strong>{node.name}</strong>
+    </div>
+    {node.children.length > 0 && (
+      <ul>
+        {node.children.map((child) => (
+          <RenderTreeNode key={child.id} node={child} />
+        ))}
+      </ul>
+    )}
+  </li>
+);
+
 export default async function Page() {
   const header = (
     <>
@@ -65,34 +82,83 @@ export default async function Page() {
     </>
   )
 
-  interface Canto {
-    results: [
-      {
-        id: string,
-        name: string,
-        additional: Additional,
-        url: ResultURL,
-      }
-    ]
-  }
-  
-  interface Additional {
-    Major: string,
-    "Student Name": string,
-    Medium: null,
-    "Graduation Year": string,
-    "Title of work": null,
+  interface FullTree {
+    sortBy: string
+    sortDirection: string
+    results: Result[]
   }
 
-  interface ResultURL {
-    directUrlOriginal: string,
-    directUrlPreview:  string,
+  interface Result {
+    time: string
+    name: string
+    id: string
+    size: string
+    scheme: string
+    owner: string
+    children: Children[]
+    url: Url3
+    created: string
+    width: string
+    height: string
+    dpi: string
+    idPath: string
+    namePath: string
+    ownerName: string
   }
 
-  let data!: Canto
+  interface Children {
+    time: string
+    name: string
+    id: string
+    size: string
+    scheme: string
+    owner: string
+    url: Url
+    created: string
+    width: string
+    height: string
+    dpi: string
+    idPath: string
+    namePath: string
+    ownerName: string
+    children?: Children2[]
+  }
+
+  interface Url {
+    preview?: string
+    detail: string
+  }
+
+  interface Children2 {
+    time: string
+    name: string
+    id: string
+    size: string
+    scheme: string
+    owner: string
+    url: Url2
+    created: string
+    width: string
+    height: string
+    dpi: string
+    idPath: string
+    namePath: string
+    ownerName: string
+  }
+
+  interface Url2 {
+    preview: string
+    detail: string
+  }
+
+  interface Url3 {
+    detail: string
+  }
+
+  let data!: FullTree
 
   try {
-    const res = await fetch(`https://${process.env.CANTO_BASE}/api/v1/album/INH96?sortBy=time&sortDirection=ascending&start=0&limit=100`, 
+    const res = await fetch(`https://${process.env.CANTO_BASE}/api/v1/tree/?sortBy=time&sortDirection=ascending&layer=-1`, 
       {
         headers: {
             "Authorization": (`Bearer ${process.env.CANTO_TOKEN}`),
@@ -101,40 +167,26 @@ export default async function Page() {
     );
 
     data = await res.json();
-    console.log(data);
+    // console.log(JSON.stringify(data,null,2));
 
   } catch (err) { 
     console.log(err);
   }
 
-  const albumItems = data.results?.map((item) => (
-      <div key={item?.id} {...stylex.props(album.card, album.stacked)}>
-       
-        <div {...stylex.props(album.imageContainer)}>
-          <Image
-            {...stylex.props(album.image)}
-            alt={`${item.additional["Student Name"]} ${item.additional["Graduation Year"]}`}
-            src={item.url.directUrlPreview}
-            layout='fill'
-            loading='lazy'
-          ></Image>
-        </div>
-        <div {...stylex.props(album.cardContent)}>
-          <h2>{item.name}</h2>
-        </div>
-      
-      </div>
-  ));
-
+  // const cantoItems: CantoItem[] = data.results;
+  const cantoItems: CantoItem[] = [data.results[0]];
+  const tree = buildTree(cantoItems);
+  //console.log(JSON.stringify(tree,null,2));
+  
   return (
     <div>
       {header}
-      <div {...stylex.props(album.container)}>
-        <div {...stylex.props(album.gallery)}>
-          {albumItems}
-        </div>
+      <div>
+        <h1>Tree Structure</h1>
+        <ul>
+          <RenderTreeNode node={tree} />
+        </ul>
       </div>
-      {/* <pre>{JSON.stringify(data.results,null,2)}</pre> */}
     </div>
   );
 }
