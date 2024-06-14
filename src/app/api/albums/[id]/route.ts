@@ -6,8 +6,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   const searchParams = request.nextUrl.searchParams
   const limit = searchParams.get('limit') || 10
   
-  console.log(limit)
-
   const id = params.id
 
   let data;
@@ -21,8 +19,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       }
     );
 
-    data = await res.json();
-    console.log(data);
+    //data = await res.json();
+    data = JSON.parse("{}");
 
   } catch (err) { 
     console.log(err);

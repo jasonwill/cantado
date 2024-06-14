@@ -99,8 +99,8 @@ export default async function Page({ params }: { params: { id: string } }) {
       }
     );
 
-    data = await res.json();
-    console.log(data);
+    // data = await res.json();
+    data = JSON.parse("{}");
 
   } catch (err) { 
     console.log(err);

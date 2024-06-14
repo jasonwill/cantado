@@ -20,8 +20,8 @@ export default async function Page() {
       }
     );
 
-    data = await res.json();
-    // console.log(JSON.stringify(data,null,2));
+    //data = await res.json();
+    data = JSON.parse("{}");
 
   } catch (err) { 
     console.log(err);
