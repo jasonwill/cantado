@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import inject from '@stylexjs/dev-runtime'
-import Header from '../components/header'
+import Header from '../components/Header'
 
 export const metadata: Metadata = {
   title: "Canto Gallery",

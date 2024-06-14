@@ -16,7 +16,7 @@ const nextConfig = {
         protocol: 'https',
         hostname: '*.canto.com',
         port: '',
-        pathname: '/direct/image/**',
+        pathname: '/direct/**',
       },
     ],
     formats: ['image/webp'],

@@ -89,9 +89,9 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   let data!: Canto
-//   INH96
+
   try {
-    const res = await fetch(`https://${process.env.CANTO_BASE}/api/v1/album/${params.id}?sortBy=time&sortDirection=ascending&start=0&limit=100`, 
+    const res = await fetch(`https://${process.env.CANTO_BASE}/api/v1/album/${params.id}?approvalStatus=approved&sortBy=time&sortDirection=descending&start=0&limit=100`, 
       {
         headers: {
             "Authorization": (`Bearer ${process.env.CANTO_TOKEN}`),
