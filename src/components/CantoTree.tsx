@@ -45,5 +45,8 @@ export const CantoTreeNode = ({ node }: { node: CantoItem }) => {
   )
 }
 export const CantoTree: React.FC<TreeNodeProps> = ({ items }) => {
-  return items.map((node, index) => <CantoTreeNode key={index} node={node} />)
+  if (items) {
+    return items.map((node, index) => <CantoTreeNode key={index} node={node} />)
+  }
+  return <div>nada.</div>
 }
