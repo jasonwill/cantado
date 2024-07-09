@@ -20,8 +20,15 @@ export default async function Page() {
       }
     );
 
-    //data = await res.json();
-    data = JSON.parse("{}");
+    const env = process.env.NODE_ENV
+
+
+    if(env == "development"){
+      data = await res.json();
+    }
+    else {
+      data = JSON.parse("{}");
+    }
 
   } catch (err) { 
     console.log(err);

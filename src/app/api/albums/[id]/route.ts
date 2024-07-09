@@ -1,3 +1,4 @@
+
 export const dynamic = 'force-dynamic' // defaults to auto
 import { type NextRequest } from 'next/server'
 
@@ -19,8 +20,14 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       }
     );
 
-    //data = await res.json();
-    data = JSON.parse("{}");
+    const env = process.env.NODE_ENV
+
+    if(env == "development"){
+      data = await res.json();
+    }
+    else {
+      data = JSON.parse("{}");
+    }
 
   } catch (err) { 
     console.log(err);
