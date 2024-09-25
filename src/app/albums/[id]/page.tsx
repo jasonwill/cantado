@@ -99,7 +99,6 @@ export default async function Page({ params }: { params: { id: string } }) {
       }
     ) 
     data = await token.json();
-    console.log(data.access_token);
 
     const res = await fetch(`https://${process.env.CANTO_BASE}/api/v1/album/${params.id}?approvalStatus=approved&sortBy=time&sortDirection=descending&start=0&limit=100`, 
       {
@@ -115,7 +114,8 @@ export default async function Page({ params }: { params: { id: string } }) {
       data = await res.json();
     }
     else {
-      data = JSON.parse("{}");
+      data = await res.json();
+      //JSON.parse("{}");
     }
 
   } catch (err) { 
