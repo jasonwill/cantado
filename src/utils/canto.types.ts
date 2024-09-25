@@ -69,3 +69,7 @@ export interface CantoUrl {
   preview?: string
   detail: string
 }
+
+export interface Canto {
+  access_token: string
+}

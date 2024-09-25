@@ -65,6 +65,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   )
 
   interface Canto {
+    access_token: string,
     results: [
       {
         id: string,
@@ -91,10 +92,19 @@ export default async function Page({ params }: { params: { id: string } }) {
   let data!: Canto
 
   try {
+
+    const token = await fetch(`https://${process.env.CANTO_OAUTH_BASE}/oauth/api/oauth2/compatible/token?app_id=${process.env.CANTO_APP_ID}&app_secret=${process.env.CANTO_APP_SECRET}&grant_type=client_credentials`,
+      {
+        method: "post",
+      }
+    ) 
+    data = await token.json();
+    console.log(data.access_token);
+
     const res = await fetch(`https://${process.env.CANTO_BASE}/api/v1/album/${params.id}?approvalStatus=approved&sortBy=time&sortDirection=descending&start=0&limit=100`, 
       {
         headers: {
-            "Authorization": (`Bearer ${process.env.CANTO_TOKEN}`),
+            "Authorization": (`Bearer ${data.access_token}`),
           },
       }
     );
